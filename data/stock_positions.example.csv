@@ -1,0 +1,3 @@
+symbol,name,asset_type,sector,strategy,quantity,cost_price,current_price,risk_price,status
+510300,沪深300ETF,ETF,宽基指数,old,1000,4.000,4.050,3.700,持有
+512880,证券ETF,ETF,券商金融,old,2000,1.000,1.020,0.900,持有
