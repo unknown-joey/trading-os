@@ -1,0 +1,14 @@
+.DS_Store
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.streamlit/secrets.toml
+.env
+
+# 个人账户和运行时数据
+data/stock_positions.csv
+data/market_data_status.json
+data/trade_plans.csv
+data/trade_journal.csv
+config/assumptions.json
