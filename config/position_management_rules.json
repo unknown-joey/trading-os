@@ -1,0 +1,154 @@
+{
+  "scope": "position_management_rules_only",
+  "market_state_detection": "not_implemented",
+  "markets": {
+    "stocks": {
+      "label": "股票",
+      "position_types": {
+        "old_position": {
+          "label": "老仓",
+          "entry_logic": [
+            "按股票市值规模控制仓位。",
+            "仓位买够后不频繁操作，用时间对冲风险。"
+          ],
+          "max_capital_ratio_or_position_limit": {
+            "large_cap": {
+              "market_cap_cny": ">= 500亿元",
+              "target_position_ratio": 0.4
+            },
+            "mid_cap": {
+              "market_cap_cny": "100亿元到500亿元",
+              "target_position_ratio": 0.3
+            },
+            "small_cap": {
+              "market_cap_cny": "40亿元到100亿元",
+              "target_position_ratio": 0.25
+            },
+            "micro_cap": {
+              "market_cap_cny": "< 40亿元",
+              "target_position_ratio": 0.1
+            }
+          },
+          "risk_control": [
+            "老仓风控价格一般不移动，不以主动止损为主。"
+          ],
+          "take_profit_or_exit_rules": [
+            "仓位买够后不频繁操作，用时间对冲风险。"
+          ]
+        },
+        "new_position": {
+          "label": "新仓",
+          "entry_logic": [
+            "新仓必须以止损位反推买入量。",
+            "止损位要尽量远离市场共识止损位。"
+          ],
+          "max_capital_ratio_or_position_limit": [
+            "单笔止损不能超过总资金1%。"
+          ],
+          "risk_control": [
+            "所有新增风险仓都必须有止损。",
+            "单笔新增风险不超过总资金1%。"
+          ],
+          "take_profit_or_exit_rules": [
+            "盈利达到2R后，将止损推到开仓价，进入保本状态。"
+          ]
+        },
+        "grid_position": {
+          "label": "网格仓",
+          "entry_logic": [
+            "适合ETF、大盘股、长期不容易退市的标的。",
+            "底部区间只买入，中间区间买入加卖出，上方区间逐步卖出或停止加仓。"
+          ],
+          "max_capital_ratio_or_position_limit": [
+            "网格资金按压力测试计算，已经分配给网格的资金不能随意抽出。"
+          ],
+          "risk_control": [
+            "跌到风险价格以下不强制卖出，但不能继续无计划加仓。"
+          ],
+          "take_profit_or_exit_rules": [
+            "底部区间只买入，中间区间买入加卖出，上方区间逐步卖出或停止加仓。"
+          ]
+        }
+      }
+    },
+    "futures": {
+      "label": "期货",
+      "position_types": {
+        "old_position": {
+          "label": "老仓",
+          "entry_logic": [
+            "采用现货做期货的思路。",
+            "可以把总资金约30%放在期货账户，剩余70%做灵活理财或备用资金。",
+            "单品种首次开仓只开去杠杆满仓的50%以内，必须至少保留一次加仓机会。"
+          ],
+          "max_capital_ratio_or_position_limit": [
+            "期货总仓位平时不得超过50%。",
+            "重大节假日、休市前，总仓位不超过25%。",
+            "8天以上长假最好不留仓。",
+            "单一品种最高3倍杠杆。",
+            "节假日前单品种杠杆降到2倍以内。",
+            "铜、橡胶等波动大的品种仓位应更轻。"
+          ],
+          "risk_control": [
+            "老仓风控价格一般不移动，不以主动止损为主，用时间和低杠杆对冲风险。"
+          ],
+          "take_profit_or_exit_rules": [
+            "8天以上长假最好不留仓。",
+            "重大节假日、休市前，总仓位不超过25%。"
+          ]
+        },
+        "new_position": {
+          "label": "新仓",
+          "entry_logic": [
+            "每一次加仓都视为独立新仓。",
+            "使用以损定量：根据止损位距离反推开仓手数。",
+            "止损位要放在共识止损位之外，必要时缩小仓位。"
+          ],
+          "max_capital_ratio_or_position_limit": [
+            "单笔止损不能超过总资金1%。"
+          ],
+          "risk_control": [
+            "所有新仓必须带止损。",
+            "单笔止损不能超过总资金1%。"
+          ],
+          "take_profit_or_exit_rules": [
+            "盈利达到2R后，将止损推到开仓价，进入保本状态。",
+            "如果后续新仓连续2个被打掉，应停止继续加仓或考虑退出。"
+          ]
+        },
+        "grid_position": {
+          "label": "网格仓",
+          "entry_logic": [
+            "选择短期波动大的品种。",
+            "最好和长期持有品种相关性低。",
+            "适合不会轻易归零、长期有均值回归逻辑的品种。",
+            "底部区间只买入，中间区间买入加卖出，上方区间逐步卖出或停止加仓。"
+          ],
+          "max_capital_ratio_or_position_limit": [
+            "期货网格必须先做压力测试。",
+            "每手资金占用 = 从入场价跌到极端压力价格时的浮亏 + 保证金。",
+            "压力价格可以取历史低点的一半，或根据品种特性手动设置。",
+            "根据可分配资金计算最多能做几手。",
+            "网格占用资金不能随意挪用，因为它是用来承受极端下跌的。"
+          ],
+          "risk_control": [
+            "期货网格必须先做压力测试。",
+            "网格占用资金不能随意挪用，因为它是用来承受极端下跌的。"
+          ],
+          "take_profit_or_exit_rules": [
+            "底部区间只买入，中间区间买入加卖出，上方区间逐步卖出或停止加仓。"
+          ]
+        }
+      }
+    }
+  },
+  "global_rules": [
+    "强相关品种只选择一个，避免表面多品种、实际同方向暴露。",
+    "所有新增风险仓都必须有止损。",
+    "单笔新增风险不超过总资金1%。",
+    "盈利达到2R后保本推进。",
+    "不允许首次开仓就打满。",
+    "生存优先于收益率。",
+    "先不实现市场状态识别，只整理仓位管理规则结构。"
+  ]
+}
